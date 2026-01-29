@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Tracker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+    <!-- Login View -->
+    <div id="loginView" class="login-container">
+        <div class="login-box">
+            <div class="login-header">
+                <h1>Employee Tracker</h1>
+                <p>Sign in to continue</p>
+            </div>
+
+            <div id="loginError" class="alert alert-error hidden"></div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" class="form-input" placeholder="Enter your username" required
+                        autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" class="form-input" placeholder="Enter your password" required
+                        autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    <span id="loginButtonText">Sign In</span>
+                    <span id="loginSpinner" class="spinner hidden"></span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Employee Dashboard View -->
+    <div id="employeeView" class="dashboard hidden">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Employee Dashboard</h1>
+                <p>Welcome, <span id="employeeName"></span></p>
+            </div>
+            <button id="employeeLogout" class="btn btn-danger">Logout</button>
+        </div>
+
+        <div class="container">
+            <div class="grid grid-3">
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionDuration">00:00:00</div>
+                    <div class="stat-label">Session Duration</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="loginTime">--:--</div>
+                    <div class="stat-label">Login Time</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">
+                        <span class="status-badge active">
+                            <span class="status-dot active"></span>
+                            Active
+                        </span>
+                    </div>
+                    <div class="stat-label">Current Status</div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h2 class="card-title">Session Information</h2>
+                </div>
+                <div>
+                    <p style="color: var(--text-secondary); line-height: 1.8;">
+                        Your work session is being tracked. Screenshots are being captured automatically
+                        to monitor productivity. You can logout at any time to end your session.
+                    </p>
+                    <div class="mt-3">
+                        <p style="color: var(--text-muted); font-size: 0.9rem;">
+                            Screenshot Interval: <strong id="screenshotInterval">1 minute</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard View -->
+    <div id="adminView" class="dashboard hidden">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Admin Dashboard</h1>
+                <p>Employee Monitoring & Management</p>
+            </div>
+            <button id="adminLogout" class="btn btn-danger">Logout</button>
+        </div>
+
+        <div class="container">
+            <!-- Statistics -->
+            <div class="grid grid-4 mb-4">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalEmployees">0</div>
+                    <div class="stat-label">Total Employees</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="activeSessions">0</div>
+                    <div class="stat-label">Active Sessions</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="screenshotsToday">0</div>
+                    <div class="stat-label">Screenshots Today</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="sessionsToday">0</div>
+                    <div class="stat-label">Sessions Today</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="card mb-4">
+                <div
+                    style="display: flex; gap: 1rem; border-bottom: 1px solid var(--glass-border); padding-bottom: 1rem;">
+                    <button class="btn btn-secondary tab-btn active" data-tab="employees">Employees</button>
+                    <button class="btn btn-secondary tab-btn" data-tab="sessions">Sessions</button>
+                    <button class="btn btn-secondary tab-btn" data-tab="settings">Settings</button>
+                </div>
+            </div>
+
+            <!-- Employees Tab -->
+            <div id="employeesTab" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">All Employees</h2>
+                        <button id="createEmployeeBtn" class="btn btn-primary">+ New Employee</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="employeesTable">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Full Name</th>
+                                    <th>Role</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sessions Tab -->
+            <div id="sessionsTab" class="tab-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Recent Sessions</h2>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="btn btn-secondary" data-filter="all">All</button>
+                            <button class="btn btn-secondary" data-filter="active">Active</button>
+                            <button class="btn btn-secondary" data-filter="ended">Ended</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="sessionsTable">
+                            <thead>
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Login Time</th>
+                                    <th>Logout Time</th>
+                                    <th>Duration</th>
+                                    <th>Screenshots</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Screenshots Modal -->
+                <div id="screenshotsModal" class="card hidden mt-4">
+                    <div class="card-header">
+                        <h2 class="card-title">Session Screenshots</h2>
+                        <button id="closeScreenshots" class="btn btn-secondary">Close</button>
+                    </div>
+                    <div id="screenshotsGallery" class="screenshot-gallery"></div>
+                </div>
+            </div>
+
+            <!-- Settings Tab -->
+            <div id="settingsTab" class="tab-content hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Application Settings</h2>
+                    </div>
+
+                    <div id="settingsSuccess" class="alert alert-success hidden"></div>
+
+                    <form id="settingsForm">
+                        <div class="form-group">
+                            <label for="intervalMinutes">Screenshot Interval (minutes)</label>
+                            <input type="number" id="intervalMinutes" class="form-input" min="0.16" step="0.1"
+                                placeholder="Enter interval in minutes">
+                            <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem;">
+                                Minimum: 0.16 minutes (10 seconds). Current setting will apply to new sessions.
+                            </p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </form>
+                </div>
+
+                <!-- Create Employee Form -->
+                <div id="createEmployeeForm" class="card mt-4 hidden">
+                    <div class="card-header">
+                        <h2 class="card-title">Create New Employee</h2>
+                        <button id="cancelCreateEmployee" class="btn btn-secondary">Cancel</button>
+                    </div>
+
+                    <div id="createEmployeeError" class="alert alert-error hidden"></div>
+                    <div id="createEmployeeSuccess" class="alert alert-success hidden"></div>
+
+                    <form id="newEmployeeForm">
+                        <div class="form-group">
+                            <label for="newUsername">Username</label>
+                            <input type="text" id="newUsername" class="form-input" required
+                                placeholder="Enter username">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newPassword">Password</label>
+                            <input type="password" id="newPassword" class="form-input" required
+                                placeholder="Enter password">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="newFullName">Full Name</label>
+                            <input type="text" id="newFullName" class="form-input"
+                                placeholder="Enter full name (optional)">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Create Employee</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">Close</button>
+            <img id="modalImage" src="" alt="Screenshot">
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script src="/js/employee.js"></script>
+    <script src="/js/admin.js"></script>
+</body>
+
+</html>

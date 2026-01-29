@@ -1,0 +1,15 @@
+node_modules/
+dist/
+screenshots/
+database.json
+*.db
+*.log
+.DS_Store
+.venv/
+.vscode/
+.env
+build/
+*.7z
+out/
+app_icon_placeholder*.png
+tray_icon_placeholder*.png

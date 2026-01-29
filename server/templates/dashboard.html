@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Tracker Dashboard</title>
+    <style>
+        body { font-family: Arial; background:#f4f6f8; margin:0; }
+        header {
+            background:#1f2937; color:white; padding:15px;
+            display:flex; justify-content:space-between;
+        }
+        .container { padding:20px; }
+
+        .cards {
+            display:grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+            gap:20px;
+        }
+        .card {
+            background:white;
+            padding:20px;
+            border-radius:8px;
+            box-shadow:0 2px 5px rgba(0,0,0,0.1);
+        }
+        select { padding:8px; margin-bottom:20px; }
+
+        .shots {
+            display:grid;
+            grid-template-columns: repeat(auto-fill, 220px);
+            gap:15px;
+        }
+        .shot {
+            background:white;
+            padding:10px;
+            border-radius:6px;
+        }
+        img {
+            width:100%;
+            border-radius:4px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2>Employee Tracker</h2>
+    <a href="/admin/logout" style="color:white">Logout</a>
+</header>
+
+<div class="container">
+
+    <!-- CARDS -->
+    <div class="cards">
+        <div class="card">
+            <h3>Total Sessions</h3>
+            <h1>{{ sessions|length }}</h1>
+        </div>
+        <div class="card">
+            <h3>Total Screenshots</h3>
+            <h1>{{ shots|length }}</h1>
+        </div>
+        <div class="card">
+            <h3>Role</h3>
+            <h1>{{ role }}</h1>
+        </div>
+    </div>
+
+    <hr><br>
+
+    <!-- FILTER -->
+    <form method="GET">
+        <select name="employee">
+            <option value="">All Employees</option>
+            {% for s in sessions %}
+                <option value="{{ s[1] }}">{{ s[1] }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+
+    <!-- SCREENSHOTS -->
+    <div class="shots">
+        {% for shot in shots %}
+        <div class="shot">
+            <small>{{ shot[1] }}</small><br>
+            <small>{{ shot[2] }}</small>
+            <img src="/screenshots/{{ shot[3] }}">
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+</body>
+</html>

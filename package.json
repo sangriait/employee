@@ -1,0 +1,45 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "Professional employee tracking application with automated screenshot capture",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "pack": "electron-builder --dir"
+  },
+  "keywords": [
+    "employee",
+    "tracking",
+    "screenshot",
+    "monitoring"
+  ],
+  "author": "Your Company",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
+    "express-session": "^1.17.3",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.company.employee-tracker",
+    "productName": "Employee Tracker",
+    "win": {
+      "target": "nsis"
+    },
+    "cscLink": null,
+    "forceCodeSigning": false,
+    "files": [
+      "**/*",
+      "!dist/*",
+      "!screenshots/*",
+      "!database.json"
+    ]
+  }
+}
