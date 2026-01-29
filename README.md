@@ -4,7 +4,7 @@
 
 ---
 
-## 📥 **[DOWNLOAD APPLICATION (Latest Release)](https://github.com/sangriait/screentime/releases)**
+## 📥 **[DOWNLOAD APPLICATION (Latest Release)](https://github.com/sangriait/employee/releases)**
 *(Click above to get the latest offline version)*
 
 ---
