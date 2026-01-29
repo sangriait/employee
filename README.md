@@ -1,73 +1,45 @@
-# 🎯 Employee Tracker - Complete Offline Monitoring System
+# 🎯 Employee Tracker
 
-A professional desktop application for tracking employee work hours, sessions, breaks, and productivity through automated screenshot capture. Designed specifically for **offline deployment at BEL** with comprehensive break timing and work hours calculation.
+**The professional, offline-capable employee monitoring solution.**
 
-![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue)
-![Electron](https://img.shields.io/badge/Electron-28.x-47848F)
-![License](https://img.shields.io/badge/License-MIT-green)
+---
 
-## 📚 Quick Links
-- **[Installation Guide](INSTALLATION_GUIDE.md)**: Step-by-step setup instructions
-- **[How to Share/Distribute](HOW_TO_SHARE_APP.md)**: Guide for sharing the app offline
-- **[How to Add Employees](HOW_TO_ADD_EMPLOYEES.md)**: Admin guide for managing users
+## 📥 **[DOWNLOAD APPLICATION (Latest Release)](https://github.com/sangriait/screentime/releases)**
+*(Click above to get the latest offline version)*
 
-## ✨ Key Features
+---
 
-### 📊 Session Tracking
-- **Login/Logout Recording**: Automatic session creation on employee login
-- **Real-Time Duration Tracking**: Live countdown of session duration
-- **Break Management**: Start/end break tracking with visual status indicators
-- **Work Hours Calculation**: Accurate work time calculation (total duration - breaks)
-- **Data Persistence**: All data stored locally in JSON format
+## 🚀 How to Run the App
+**Just download, unzip, and run!**
 
-### 🎬 Break Timing Features
-- **Break Start/End Tracking**: Record exact break times for each employee
-- **Multiple Breaks**: Support for multiple breaks within a single session
-- **Break Duration Display**: Shows total break time separately from work time
-- **Visual Indicators**: Clear UI showing when employee is on break (yellow/orange status)
-- **Automatic Calculation**: Work hours automatically exclude all break periods
+1. **Download** the zip file from the "Releases" (link above).
+2. **Unzip** the folder completely.
+3. Double-click **`Employee Tracker.exe`**.
+4. **Done!** No installation required.
 
-### 📸 Screenshot Monitoring
-- **Automated Capture**: Screenshots taken at configurable intervals
-- **Gallery View**: Admin can view all screenshots for any session
-- **Timestamp Recording**: Each screenshot tagged with precise capture time
-- **Customizable Interval**: Set capture frequency (minimum 10 seconds)
+---
 
-### 👔 Employee Dashboard
-Displays:
-- **Total Duration**: Complete session time from login to current moment
-- **Work Time**: Active work hours (excludes all breaks)
-- **Break Time**: Total time spent on breaks
-- **Current Status**: Active or On Break with visual indicator
-- **Login Time**: Session start time
-- **Current Time**: Real-time clock
+## 📚 User Guides
+- **[Installation Guide](INSTALLATION_GUIDE.md)**
+- **[How to Share with Others](HOW_TO_SHARE_APP.md)**
+- **[Admin Guide: Adding Employees](HOW_TO_ADD_EMPLOYEES.md)**
 
-### 👨‍💼 Admin Dashboard
-Features:
-- **Employee Management**: Create, view, and manage employee accounts
-- **Session Monitoring**: View all sessions with detailed breakdowns
-- **Statistics**: Total employees, active sessions, daily metrics
-- **Screenshot Gallery**: Access and review captured screenshots
-- **Break Analytics**: View break duration and work hours for each session
-- **Settings**: Configure screenshot capture intervals
+---
 
-## 🛠️ Technology Stack
+## ✨ Features at a Glance
+- **Zero Installation**: Runs directly from a folder.
+- **Fully Offline**: No internet required.
+- **Session Tracking**: Automatic time and break calculation.
+- **Screenshots**: Auto-capture monitoring (stored locally).
 
-- **Desktop Framework**: Electron 28.x
-- **Backend**: Node.js + Express
-- **Database**: JSON file-based storage (no external DB required)
-- **Frontend**: Vanilla JavaScript, HTML5, Modern CSS
-- **Security**: bcryptjs for password hashing
-- **Session Management**: express-session
+---
 
 ## 📋 System Requirements
-
-### For Installation
 - Windows 10 or Windows 11
-- Node.js 18.x or higher  
-- npm 9.x or higher
-- 200 MB disk space (+ storage for screenshots)
-- Administrative privileges (for installation only)
+- No Internet Required
+- 300 MB Disk Space
+
+---
 
 ### For Running Portable Build
 - Windows 10 or Windows 11

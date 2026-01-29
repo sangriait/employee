@@ -18,3 +18,4 @@ tray_icon_placeholder*.png
 test_console.js
 test_break_button.html
 manual_build.ps1
+*.zip
