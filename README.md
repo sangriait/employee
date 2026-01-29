@@ -1,38 +1,348 @@
-# 🚀 Employee Tracker (Stable v1.0)
+# 🎯 Employee Tracker - Complete Offline Monitoring System
 
-A professional, high-performance desktop application for tracking work hours and activity. This enterprise-grade tool is optimized for **Windows** with a unique zero-native-dependency architecture.
+A professional desktop application for tracking employee work hours, sessions, breaks, and productivity through automated screenshot capture. Designed specifically for **offline deployment at BEL** with comprehensive break timing and work hours calculation.
 
-✨ **[View the Visual Showcase](showcase.html)**
+![Platform](https://img.shields.io/badge/Platform-Windows%2010%2F11-blue)
+![Electron](https://img.shields.io/badge/Electron-28.x-47848F)
+![License](https://img.shields.io/badge/License-MIT-green)
 
-## 💎 Features
-- ✅ **Seamless Tracking**: Automated login/logout monitoring.
-- ✅ **Secure Capture**: High-resolution screenshots via native Windows API.
-- ✅ **Premium UI**: Modern, glassmorphic design for both Admin and Employee.
-- ✅ **Zero-Native Stability**: Eliminated common Electron crashes by removing unstable native modules.
+## 📚 Quick Links
+- **[Installation Guide](INSTALLATION_GUIDE.md)**: Step-by-step setup instructions
+- **[How to Share/Distribute](HOW_TO_SHARE_APP.md)**: Guide for sharing the app offline
+- **[How to Add Employees](HOW_TO_ADD_EMPLOYEES.md)**: Admin guide for managing users
+
+## ✨ Key Features
+
+### 📊 Session Tracking
+- **Login/Logout Recording**: Automatic session creation on employee login
+- **Real-Time Duration Tracking**: Live countdown of session duration
+- **Break Management**: Start/end break tracking with visual status indicators
+- **Work Hours Calculation**: Accurate work time calculation (total duration - breaks)
+- **Data Persistence**: All data stored locally in JSON format
+
+### 🎬 Break Timing Features
+- **Break Start/End Tracking**: Record exact break times for each employee
+- **Multiple Breaks**: Support for multiple breaks within a single session
+- **Break Duration Display**: Shows total break time separately from work time
+- **Visual Indicators**: Clear UI showing when employee is on break (yellow/orange status)
+- **Automatic Calculation**: Work hours automatically exclude all break periods
+
+### 📸 Screenshot Monitoring
+- **Automated Capture**: Screenshots taken at configurable intervals
+- **Gallery View**: Admin can view all screenshots for any session
+- **Timestamp Recording**: Each screenshot tagged with precise capture time
+- **Customizable Interval**: Set capture frequency (minimum 10 seconds)
+
+### 👔 Employee Dashboard
+Displays:
+- **Total Duration**: Complete session time from login to current moment
+- **Work Time**: Active work hours (excludes all breaks)
+- **Break Time**: Total time spent on breaks
+- **Current Status**: Active or On Break with visual indicator
+- **Login Time**: Session start time
+- **Current Time**: Real-time clock
+
+### 👨‍💼 Admin Dashboard
+Features:
+- **Employee Management**: Create, view, and manage employee accounts
+- **Session Monitoring**: View all sessions with detailed breakdowns
+- **Statistics**: Total employees, active sessions, daily metrics
+- **Screenshot Gallery**: Access and review captured screenshots
+- **Break Analytics**: View break duration and work hours for each session
+- **Settings**: Configure screenshot capture intervals
 
 ## 🛠️ Technology Stack
-- **Frontend**: Vanilla JS, Modern CSS (Glassmorphism), HTML5.
-- **Backend**: Node.js, Express, JSON Data Store.
-- **Desktop Core**: Electron (Isolated System Bridge).
-- **Automation**: Windows .NET / PowerShell Integration.
 
-## 🚀 Installation & Build
+- **Desktop Framework**: Electron 28.x
+- **Backend**: Node.js + Express
+- **Database**: JSON file-based storage (no external DB required)
+- **Frontend**: Vanilla JavaScript, HTML5, Modern CSS
+- **Security**: bcryptjs for password hashing
+- **Session Management**: express-session
 
-### 1. Developer Mode
+## 📋 System Requirements
+
+### For Installation
+- Windows 10 or Windows 11
+- Node.js 18.x or higher  
+- npm 9.x or higher
+- 200 MB disk space (+ storage for screenshots)
+- Administrative privileges (for installation only)
+
+### For Running Portable Build
+- Windows 10 or Windows 11
+- No Node.js required (all dependencies bundled)
+- 300 MB disk space minimum
+
+## 🚀 Installation & Setup
+
+### Option 1: Development Mode (For Testing)
+
+1. **Clone or Download the Repository**
+   ```bash
+   git clone https://github.com/sangriait/screentime.git
+   cd screentime
+   ```
+
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the Application**
+   ```bash
+   npm start
+   ```
+
+   The application window will open automatically on `http://localhost:3000`.
+
+### Option 2: Build Portable Executable (For Distribution)
+
+1. **Install Dependencies** (if not already done)
+   ```bash
+   npm install
+   ```
+
+2. **Build the Application**
+   ```bash
+   npm run pack
+   ```
+
+3. **Locate the Build**
+   - Find the portable application in: `dist/win-unpacked/`
+   - The main executable is: `Employee Tracker.exe`
+
+4. **Distribute**
+   - Copy the entire `win-unpacked` folder to target machines
+   - No installation required - just run the `.exe` file
+   - All dependencies are bundled
+
+### Option 3: Create Installer (NSIS)
+
 ```bash
-npm install
-npm start
+npm run build
 ```
 
-### 2. Generate Portable App
-```bash
-npm run pack
-```
-Find your portable folder in `dist/win-unpacked/`.
+This creates a Windows installer in the `dist` folder.
 
-## 🔑 Default Accounts
-- **Admin**: `admin` / `admin123`
-- **Employee**: `employee1` / `emp123`
+## 🔌 Offline Deployment Instructions (BEL)
+
+**This application is fully offline-capable and requires NO internet connection to function.**
+
+### Step 1: Prepare on Internet-Connected Machine
+
+1. Download this repository as ZIP or clone it
+2. Run `npm install` to download all dependencies
+3. Run `npm run pack` to create portable build
+4. Copy the entire `dist/win-unpacked/` folder to a USB drive
+
+### Step 2: Deploy on Offline Machines
+
+1. Copy the `win-unpacked` folder from USB to target machine
+2. Navigate to the folder and run `Employee Tracker.exe`
+3. No internet connection needed
+4. No installation required
+5. Data is stored locally in `database.json`
+
+### Step 3: Backup Configuration
+
+To transfer data or settings between machines:
+- Copy `database.json` file from the application folder
+- This contains all employees, sessions, and settings
+- Screenshots are stored in `server/screenshots/` folder
+
+## 🔑 Default Login Credentials
+
+### Admin Account
+- **Username**: `admin`
+- **Password**: `admin123`
+
+### Demo Employee Account  
+- **Username**: `employee1`
+- **Password**: `emp123`
+
+> ⚠️ **IMPORTANT**: Change admin password immediately after first login for security.
+
+## 📖 User Guide
+
+### For Employees
+
+1. **Login**
+   - Open the application
+   - Enter your username and password
+   - Click "Sign In"
+
+2. **View Your Dashboard**
+   - See your session duration, work time, and break time
+   - Monitor your current status (Active/On Break)
+   - View login time and current time
+
+3. **Take Breaks**
+   - Click "Take a Break" button when leaving workstation
+   - Status changes to "On Break" (yellow/orange indicator)
+   - Click "Resume Work" when returning
+   - Your break time is tracked separately
+
+4. **Logout**
+   - Click "Logout" button when ending your work day
+   - Your session is saved with complete timing data
+
+### For Administrators
+
+1. **Login as Admin**
+   - Use admin credentials to access admin dashboard
+
+2. **Create New Employees**
+   - Go to "Employees" tab
+   - Click "+ New Employee"
+   - Enter username, password, and full name
+   - Click "Create Employee"
+
+3. **View Employee Sessions**
+   - Go to "Sessions" tab
+   - See all sessions with:
+     - Login/logout times
+     - Total duration
+     - Break time (in yellow/orange)
+     - Work hours (in green)
+     - Screenshot count
+   - Click "View Screenshots" to see captured images
+
+4. **Filter Sessions**
+   - Use filter buttons: All / Active / Ended
+   - View specific employee sessions by clicking "View Sessions" in Employees tab
+
+5. **Configure Settings**
+   - Go to "Settings" tab
+   - Adjust screenshot interval (in minutes)
+   - Click "Save Settings"
+
+## 📊 Data Structure
+
+All data is stored in `database.json` in the application root:
+
+```json
+{
+  "employees": [...],
+  "sessions": [...],
+  "screenshots": [...],
+  "attendance_logs": [...], // Break start/end records
+  "settings": [...]
+}
+```
+
+### Break Timing Calculation
+
+**Total Session Duration** = Logout Time - Login Time
+
+**Break Duration** = Sum of all (Break End - Break Start) intervals
+
+**Actual Work Hours** = Total Session Duration - Break Duration
+
+## 🔧 Configuration
+
+### Screenshot Interval
+
+Default: 60 seconds (1 minute)
+
+To change:
+1. Login as admin
+2. Go to Settings tab
+3. Enter new interval in minutes (minimum 0.16 = 10 seconds)
+4. Click "Save Settings"
+
+### Port Configuration
+
+The application runs on port `3000` by default. To change:
+- Edit `server/app.js`, line with `const PORT = 3000`
+
+## 🐛 Troubleshooting
+
+### Application Won't Start
+
+**Problem**: Double-clicking .exe doesn't launch
+- **Solution**: Right-click → Run as Administrator
+- Check if port 3000 is available
+
+### Can't Login
+
+**Problem**: Username/password not working
+- **Solution**: Use default credentials listed above
+- Check if `database.json` exists
+- Delete `database.json` to reset (will lose data)
+
+### Screenshots Not Saving
+
+**Problem**: No screenshots in gallery
+- **Solution**: Check `server/screenshots/` folder exists
+- Ensure write permissions on application folder
+- Verify screenshot interval is set correctly
+
+### Break Time Not Updating
+
+**Problem**: Break duration shows 00:00:00
+- **Solution**:  Ensure you clicked "Take a Break" button
+- Check `attendance_logs` in `database.json` for entries
+- Refresh the admin dashboard
+
+### Data Loss After Restart
+
+**Problem**: Sessions disappear after closing app
+- **Solution**: Check `database.json` file exists
+- Ensure app has write permissions to folder
+- Don't delete `database.json` file
+
+## 📁 Folder Structure
+
+```
+employee_tracker/
+├── main.js                 # Electron main process
+├── preload.js             # Electron preload script
+├── package.json           # Dependencies and scripts
+├── database.json          # Data storage (auto-created)
+├── public/                # Frontend files
+│   ├── index.html         # Main HTML
+│   ├── css/               # Styles
+│   └── js/                # Frontend JavaScript
+│       ├── app.js         # Main app logic
+│       ├── employee.js    # Employee dashboard
+│       └── admin.js       # Admin dashboard
+├── server/                # Backend files
+│   ├── app.js             # Express server
+│   ├── database.js        # JSON database handler
+│   ├── routes/            # API endpoints
+│   │   ├── auth.js        # Login/logout
+│   │   ├── admin.js       # Admin operations
+│   │   └── tracking.js    # Break tracking
+│   ├── middleware/        # Authentication
+│   ├── services/          # Screenshot service
+│   └── screenshots/       # Captured images (auto-created)
+└── dist/                  # Build output (after npm run pack)
+```
+
+## 🔒 Security Notes
+
+- Passwords are hashed using bcryptjs
+- Session management via express-session
+- No external network calls required
+- Data stored locally - ensure folder permissions are secure
+- Change default admin password immediately
+
+## 🆘 Support
+
+For issues or questions:
+1. Check this README thoroughly
+2. Review the `HOW_TO_SHARE_APP.md` for detailed sharing instructions
+3. Check troubleshooting section above
+4. Contact your system administrator
+
+## 📝 License
+
+MIT License - See LICENSE file for details
 
 ---
-**Status**: Production Stable ✅ | **Platform**: Windows 10/11 🪟
+
+**Status**: Production Ready ✅  
+**Platform**: Windows 10/11 🪟  
+**Mode**: Fully Offline 🔌  
+**Version**: 1.0.0

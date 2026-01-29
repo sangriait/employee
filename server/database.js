@@ -7,6 +7,7 @@ let data = {
     employees: [],
     sessions: [],
     screenshots: [],
+    attendance_logs: [],
     settings: [
         { key: 'screenshot_interval', value: '60000' }
     ]
@@ -18,6 +19,12 @@ async function initDatabase() {
         if (fileExists) {
             const raw = await fs.readFile(DB_PATH, 'utf8');
             data = JSON.parse(raw);
+
+            // Ensure attendance_logs exists
+            if (!data.attendance_logs) {
+                data.attendance_logs = [];
+            }
+
             console.log('Database loaded from JSON');
 
             // Auto-repair missing IDs
@@ -116,6 +123,28 @@ const getDatabase = () => ({
                 if (setting) setting.value = params[1];
                 else data.settings.push({ key: params[0], value: params[1] });
                 save().then(() => { if (callback) callback(null); });
+            } else if (query.includes('INSERT INTO employees')) {
+                const id = data.employees.reduce((max, e) => Math.max(max, e.id || 0), 0) + 1;
+                data.employees.push({
+                    id,
+                    username: params[0],
+                    password: params[1],
+                    role: params[2],
+                    full_name: params[3],
+                    created_at: new Date().toISOString()
+                });
+                save().then(() => { if (callback) callback.call({ lastID: id }, null); });
+            } else if (query.includes('INSERT INTO attendance_logs')) {
+                const id = (data.attendance_logs || []).reduce((max, l) => Math.max(max, l.id || 0), 0) + 1;
+                if (!data.attendance_logs) data.attendance_logs = [];
+                data.attendance_logs.push({
+                    id,
+                    employee_id: parseInt(params[0]),
+                    session_id: parseInt(params[1]),
+                    type: params[2],
+                    timestamp: new Date().toISOString()
+                });
+                save().then(() => { if (callback) callback(null); });
             } else { if (callback) callback(null); }
         } catch (e) { if (callback) callback(e); }
     },
@@ -144,9 +173,19 @@ const getDatabase = () => ({
             } else if (query.includes('FROM screenshots')) {
                 const results = data.screenshots.filter(s => s.session_id == params[0]);
                 callback(null, results);
+            } else if (query.includes('FROM attendance_logs')) {
+                const results = (data.attendance_logs || []).filter(l => l.session_id == params[0]);
+                callback(null, results);
             } else { callback(null, []); }
         } catch (e) { callback(e); }
     }
 });
 
-module.exports = { initDatabase, getDatabase, closeDatabase: () => Promise.resolve() };
+module.exports = {
+    initDatabase,
+    getDatabase,
+    getData: () => data,
+    saveData: save,
+    closeDatabase: () => Promise.resolve()
+};
+

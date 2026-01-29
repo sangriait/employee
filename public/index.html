@@ -5,9 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Tracker</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/fonts.css">
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
@@ -54,25 +52,50 @@
         </div>
 
         <div class="container">
-            <div class="grid grid-3">
+            <div class="grid grid-4">
                 <div class="stat-card">
                     <div class="stat-value" id="sessionDuration">00:00:00</div>
-                    <div class="stat-label">Session Duration</div>
+                    <div class="stat-label">Total Duration</div>
                 </div>
 
+                <div class="stat-card">
+                    <div class="stat-value" id="workDuration">00:00:00</div>
+                    <div class="stat-label">Work Time</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value" id="breakDuration">00:00:00</div>
+                    <div class="stat-label">Break Time</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">
+                        <span id="statusBadge" class="status-badge active">
+                            <span class="status-dot active"></span>
+                            <span id="statusText">Active</span>
+                        </span>
+                    </div>
+                    <div class="stat-label">Current Status</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2 mt-4">
                 <div class="stat-card">
                     <div class="stat-value" id="loginTime">--:--</div>
                     <div class="stat-label">Login Time</div>
                 </div>
 
                 <div class="stat-card">
-                    <div class="stat-value">
-                        <span class="status-badge active">
-                            <span class="status-dot active"></span>
-                            Active
-                        </span>
-                    </div>
-                    <div class="stat-label">Current Status</div>
+                    <div class="stat-value" id="currentTime">--:--</div>
+                    <div class="stat-label">Current Time</div>
+                </div>
+            </div>
+
+            <div class="card mt-4">
+                <div class="card-header" style="justify-content: center; padding-bottom: 0;">
+                    <button id="breakBtn" class="btn btn-secondary" style="min-width: 200px;">
+                        Take a Break
+                    </button>
                 </div>
             </div>
 
@@ -182,7 +205,9 @@
                                     <th>Employee</th>
                                     <th>Login Time</th>
                                     <th>Logout Time</th>
-                                    <th>Duration</th>
+                                    <th>Total Duration</th>
+                                    <th>Break Time</th>
+                                    <th>Work Hours</th>
                                     <th>Screenshots</th>
                                     <th>Status</th>
                                     <th>Actions</th>
@@ -200,6 +225,27 @@
                         <button id="closeScreenshots" class="btn btn-secondary">Close</button>
                     </div>
                     <div id="screenshotsGallery" class="screenshot-gallery"></div>
+                </div>
+
+                <!-- Break Logs Modal -->
+                <div id="breakLogsModal" class="card hidden mt-4">
+                    <div class="card-header">
+                        <h2 class="card-title">Break Periods</h2>
+                        <button id="closeBreakLogs" class="btn btn-secondary">Close</button>
+                    </div>
+                    <div class="table-container">
+                        <table id="breakLogsTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Break Start</th>
+                                    <th>Break End</th>
+                                    <th>Duration</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 

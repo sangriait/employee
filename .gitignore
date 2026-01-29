@@ -13,3 +13,8 @@ build/
 out/
 app_icon_placeholder*.png
 tray_icon_placeholder*.png
+
+# Test files
+test_console.js
+test_break_button.html
+manual_build.ps1

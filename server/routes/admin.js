@@ -63,7 +63,55 @@ router.get('/sessions', (req, res) => {
             return res.status(500).json({ error: 'Internal server error' });
         }
 
-        res.json({ sessions });
+        // Calculate break duration for each session
+        const sessionsWithBreaks = sessions.map(session => {
+            return new Promise((resolve) => {
+                db.all(
+                    'SELECT type, timestamp FROM attendance_logs WHERE session_id = ? ORDER BY timestamp ASC',
+                    [session.id],
+                    (err, logs) => {
+                        if (err || !logs) {
+                            resolve({ ...session, break_duration: 0, work_duration: 0 });
+                            return;
+                        }
+
+                        let totalBreakMs = 0;
+                        let breakStart = null;
+
+                        logs.forEach(log => {
+                            if (log.type === 'break_start') {
+                                breakStart = new Date(log.timestamp);
+                            } else if (log.type === 'break_end' && breakStart) {
+                                const breakEnd = new Date(log.timestamp);
+                                totalBreakMs += (breakEnd - breakStart);
+                                breakStart = null;
+                            }
+                        });
+
+                        // If currently on break
+                        if (breakStart) {
+                            const now = new Date();
+                            totalBreakMs += (now - breakStart);
+                        }
+
+                        const loginTime = new Date(session.login_time);
+                        const logoutTime = session.logout_time ? new Date(session.logout_time) : new Date();
+                        const totalSessionMs = logoutTime - loginTime;
+                        const activeWorkMs = Math.max(0, totalSessionMs - totalBreakMs);
+
+                        resolve({
+                            ...session,
+                            break_duration: totalBreakMs,
+                            work_duration: activeWorkMs
+                        });
+                    }
+                );
+            });
+        });
+
+        Promise.all(sessionsWithBreaks).then(results => {
+            res.json({ sessions: results });
+        });
     });
 });
 

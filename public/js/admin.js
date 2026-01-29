@@ -114,6 +114,10 @@ function setupAdminForms() {
     document.getElementById('closeScreenshots').addEventListener('click', () => {
         document.getElementById('screenshotsModal').classList.add('hidden');
     });
+
+    document.getElementById('closeBreakLogs').addEventListener('click', () => {
+        document.getElementById('breakLogsModal').classList.add('hidden');
+    });
 }
 
 async function loadDashboardStats() {
@@ -174,15 +178,22 @@ async function loadSessions() {
 
         data.sessions.forEach(session => {
             const row = document.createElement('tr');
+            const totalDuration = formatDuration(session.login_time, session.logout_time);
+            const breakDuration = formatDurationMs(session.break_duration || 0);
+            const workDuration = formatDurationMs(session.work_duration || 0);
+
             row.innerHTML = `
         <td>${session.full_name || session.username}</td>
         <td>${formatDateTime(session.login_time)}</td>
         <td>${session.logout_time ? formatDateTime(session.logout_time) : '--'}</td>
-        <td>${formatDuration(session.login_time, session.logout_time)}</td>
+        <td>${totalDuration}</td>
+        <td style="color: #f59e0b;">${breakDuration}</td>
+        <td style="color: #10b981; font-weight: 600;">${workDuration}</td>
         <td>${session.screenshot_count}</td>
         <td><span class="status-badge ${session.status === 'active' ? 'active' : 'inactive'}">${session.status}</span></td>
-        <td>
-          <button class="btn btn-secondary" onclick="viewScreenshots(${session.id})">View Screenshots</button>
+        <td style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-secondary" onclick="viewScreenshots(${session.id})">Screenshots</button>
+          <button class="btn btn-secondary" onclick="viewBreakLogs(${session.id})">Breaks</button>
         </td>
       `;
             tbody.appendChild(row);
@@ -190,6 +201,15 @@ async function loadSessions() {
     } catch (error) {
         console.error('Error loading sessions:', error);
     }
+}
+
+// Helper function to format duration in milliseconds
+function formatDurationMs(ms) {
+    if (!ms || ms < 0) return '00:00:00';
+    const hours = Math.floor(ms / 3600000);
+    const minutes = Math.floor((ms % 3600000) / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 }
 
 async function viewEmployeeSessions(employeeId) {
@@ -205,21 +225,87 @@ async function viewEmployeeSessions(employeeId) {
 
         data.sessions.forEach(session => {
             const row = document.createElement('tr');
+            const totalDuration = formatDuration(session.login_time, session.logout_time);
+            const breakDuration = formatDurationMs(session.break_duration || 0);
+            const workDuration = formatDurationMs(session.work_duration || 0);
+
             row.innerHTML = `
         <td>${session.full_name || session.username}</td>
         <td>${formatDateTime(session.login_time)}</td>
         <td>${session.logout_time ? formatDateTime(session.logout_time) : '--'}</td>
-        <td>${formatDuration(session.login_time, session.logout_time)}</td>
+        <td>${totalDuration}</td>
+        <td style="color: #f59e0b;">${breakDuration}</td>
+        <td style="color: #10b981; font-weight: 600;">${workDuration}</td>
         <td>${session.screenshot_count}</td>
         <td><span class="status-badge ${session.status === 'active' ? 'active' : 'inactive'}">${session.status}</span></td>
-        <td>
-          <button class="btn btn-secondary" onclick="viewScreenshots(${session.id})">View Screenshots</button>
+        <td style="display: flex; gap: 0.5rem;">
+          <button class="btn btn-secondary" onclick="viewScreenshots(${session.id})">Screenshots</button>
+          <button class="btn btn-secondary" onclick="viewBreakLogs(${session.id})">Breaks</button>
         </td>
       `;
             tbody.appendChild(row);
         });
     } catch (error) {
         console.error('Error loading employee sessions:', error);
+    }
+}
+
+// View break logs for a session
+async function viewBreakLogs(sessionId) {
+    try {
+        const response = await fetch(`${API_BASE}/tracking/logs/${sessionId}`);
+        const data = await response.json();
+
+        const tbody = document.querySelector('#breakLogsTable tbody');
+        tbody.innerHTML = '';
+
+        if (!data.logs || data.logs.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">No breaks recorded for this session</td></tr>';
+        } else {
+            // Pair break_start with break_end
+            const breaks = [];
+            let currentBreak = null;
+
+            data.logs.forEach(log => {
+                if (log.type === 'break_start') {
+                    currentBreak = { start: log.timestamp, end: null };
+                } else if (log.type === 'break_end' && currentBreak) {
+                    currentBreak.end = log.timestamp;
+                    breaks.push(currentBreak);
+                    currentBreak = null;
+                }
+            });
+
+            // If there's an unclosed break
+            if (currentBreak) {
+                currentBreak.end = null;
+                breaks.push(currentBreak);
+            }
+
+            if (breaks.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 2rem; color: var(--text-muted);">No breaks recorded for this session</td></tr>';
+            } else {
+                breaks.forEach((brk, index) => {
+                    const duration = brk.end
+                        ? new Date(brk.end) - new Date(brk.start)
+                        : new Date() - new Date(brk.start);
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${formatDateTime(brk.start)}</td>
+                        <td>${brk.end ? formatDateTime(brk.end) : '<span style="color: #f59e0b;">Active</span>'}</td>
+                        <td>${formatDurationMs(duration)}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+        }
+
+        document.getElementById('breakLogsModal').classList.remove('hidden');
+    } catch (error) {
+        console.error('Error loading break logs:', error);
+        alert('Failed to load break logs');
     }
 }
 

@@ -34,9 +34,11 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // API Routes
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const trackingRoutes = require('./routes/tracking');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/tracking', trackingRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
