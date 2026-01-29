@@ -52,8 +52,8 @@
 
 1. **Clone or Download the Repository**
    ```bash
-   git clone https://github.com/sangriait/screentime.git
-   cd screentime
+   git clone  https://github.com/sangriait/employee
+   cd employee
    ```
 
 2. **Install Dependencies**
